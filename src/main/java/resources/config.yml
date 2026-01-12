@@ -1,0 +1,9 @@
+revive-cost:
+  TOTEM_OF_UNDYING: 2
+  DIAMOND: 4
+  OBSIDIAN: 3
+
+revive:
+  lightning: true
+  particle: true
+  sound: true
