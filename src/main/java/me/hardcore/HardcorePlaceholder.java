@@ -5,31 +5,21 @@ import org.bukkit.entity.Player;
 
 public class HardcorePlaceholder extends PlaceholderExpansion {
 
-    @Override
-    public String getIdentifier() {
-        return "hardcore";
+    private final HardcorePlugin plugin;
+
+    public HardcorePlaceholder(HardcorePlugin plugin) {
+        this.plugin = plugin;
     }
 
-    @Override
-    public String getAuthor() {
-        return "HardcoreCustom";
-    }
+    @Override public String getIdentifier() { return "hardcore"; }
+    @Override public String getAuthor() { return "You"; }
+    @Override public String getVersion() { return "1.4"; }
 
     @Override
-    public String getVersion() {
-        return "1.3";
-    }
-
-    @Override
-    public String onPlaceholderRequest(Player player, String params) {
-        if (player == null) return "";
-
-        if (params.equalsIgnoreCase("lives")) {
-            return String.valueOf(
-                HardcorePlugin.getInstance().getLives(player.getUniqueId())
-            );
-        }
-
-        return null;
+    public String onPlaceholderRequest(Player p, String id) {
+        if (p == null) return "";
+        if (id.equalsIgnoreCase("lives"))
+            return String.valueOf(plugin.getLives(p.getUniqueId()));
+        return "";
     }
 }
