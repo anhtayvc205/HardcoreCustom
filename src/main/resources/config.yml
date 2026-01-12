@@ -1,9 +1,12 @@
+max-lives: 5
+revive-lives: 1
+
 revive-cost:
   TOTEM_OF_UNDYING: 2
-  DIAMOND: 4
+  DIAMOND_BLOCK: 4
   OBSIDIAN: 3
 
-revive:
+effects:
   lightning: true
   particle: true
   sound: true
