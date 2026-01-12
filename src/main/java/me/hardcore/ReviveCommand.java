@@ -14,6 +14,7 @@ public class ReviveCommand implements CommandExecutor {
 
         HardcorePlugin plugin = HardcorePlugin.getInstance();
 
+        // /hardcore reload
         if (cmd.getName().equalsIgnoreCase("hardcore")) {
             plugin.reloadConfig();
             plugin.loadData();
@@ -21,18 +22,48 @@ public class ReviveCommand implements CommandExecutor {
             return true;
         }
 
-        if (!(sender instanceof Player reviver)) return true;
-        if (args.length != 1) return true;
+        // /hoisinh <tên>
+        if (!(sender instanceof Player reviver)) {
+            sender.sendMessage("§cChỉ người chơi mới dùng được.");
+            return true;
+        }
+
+        if (args.length != 1) {
+            reviver.sendMessage("§cDùng: /hoisinh <tên>");
+            return true;
+        }
 
         Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) return true;
-        if (plugin.getLives(target.getUniqueId()) > 0) return true;
+        if (target == null) {
+            reviver.sendMessage("§cNgười chơi không online.");
+            return true;
+        }
 
-        if (!hasItems(reviver, plugin)) return true;
+        if (plugin.getLives(target.getUniqueId()) > 0) {
+            reviver.sendMessage("§eNgười này chưa chết hẳn.");
+            return true;
+        }
+
+        // kiểm tra nguyên liệu
+        if (!hasItems(reviver, plugin)) {
+            reviver.sendMessage("§cKhông đủ nguyên liệu hồi sinh.");
+            return true;
+        }
+
         removeItems(reviver, plugin);
 
+        // 🔥 QUAN TRỌNG: SET LẠI MẠNG
+        plugin.setLives(target.getUniqueId(), 1);
+
         target.setGameMode(GameMode.SURVIVAL);
+        target.teleport(target.getWorld().getSpawnLocation());
+        target.setHealth(20.0);
+        target.setFoodLevel(20);
+
         playEffect(target, plugin);
+
+        reviver.sendMessage("§aĐã hồi sinh " + target.getName());
+        target.sendMessage("§aBạn đã được hồi sinh!");
 
         return true;
     }
